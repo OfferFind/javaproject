@@ -1,0 +1,181 @@
+// Combined Example: Inheritance + Exception Handling
+public class Main {
+
+    // ---------------- INHERITANCE EXAMPLES ----------------
+    static class Animal {
+        void eat() {
+            System.out.println("Eating...");
+        }
+    }
+
+    // 1️⃣ Single Inheritance
+    static class Dog extends Animal {
+        void bark() {
+            System.out.println("Barking...");
+        }
+    }
+
+    // 2️⃣ Multilevel Inheritance
+    static class Puppy extends Dog {
+        void weep() {
+            System.out.println("Weeping...");
+        }
+    }
+
+    // 3️⃣ Hierarchical Inheritance
+    static class Cat extends Animal {
+        void meow() {
+            System.out.println("Meowing...");
+        }
+    }
+
+    // 4️⃣ Multiple Inheritance (via interfaces)
+    interface Printable {
+        void print();
+    }
+
+    interface Showable {
+        void show();
+    }
+
+    static class Demo implements Printable, Showable {
+        public void print() {
+            System.out.println("Printing...");
+        }
+        public void show() {
+            System.out.println("Showing...");
+        }
+    }
+
+    // 5️⃣ Hybrid Inheritance (class + interface)
+    static class A {
+        void displayA() {
+            System.out.println("Class A method");
+        }
+    }
+
+    interface B {
+        void displayB();
+    }
+
+    static class C extends A implements B {
+        public void displayB() {
+            System.out.println("Interface B method");
+        }
+    }
+
+    // ---------------- EXCEPTION HANDLING EXAMPLES ----------------
+    static class ExceptionExamples {
+
+        void tryCatchExample() {
+            System.out.println("\n1️⃣ Try-Catch Example:");
+            try {
+                int a = 10, b = 0;
+                int result = a / b;
+                System.out.println(result);
+            } catch (ArithmeticException e) {
+                System.out.println("Error: Cannot divide by zero!");
+            }
+        }
+
+        void multipleCatchExample() {
+            System.out.println("\n2️⃣ Multiple Catch Example:");
+            try {
+                int[] arr = {1, 2, 3};
+                System.out.println(arr[5]);
+            } catch (ArithmeticException e) {
+                System.out.println("Arithmetic Error!");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Array Index Error!");
+            } catch (Exception e) {
+                System.out.println("General Exception!");
+            }
+        }
+
+        void finallyExample() {
+            System.out.println("\n3️⃣ Finally Block Example:");
+            try {
+                int data = 10 / 0;
+            } catch (ArithmeticException e) {
+                System.out.println("Exception caught");
+            } finally {
+                System.out.println("Finally block always executes");
+            }
+        }
+
+        void throwExample() {
+            System.out.println("\n4️⃣ throw Keyword Example:");
+            try {
+                validate(16);
+            } catch (ArithmeticException e) {
+                System.out.println("Exception: " + e.getMessage());
+            }
+        }
+
+        void validate(int age) {
+            if (age < 18)
+                throw new ArithmeticException("Not eligible to vote");
+            else
+                System.out.println("Eligible to vote");
+        }
+
+        void throwsExample() {
+            System.out.println("\n5️⃣ throws Keyword Example:");
+            try {
+                riskyMethod();
+            } catch (Exception e) {
+                System.out.println("Exception handled using throws");
+            }
+        }
+
+        void riskyMethod() throws Exception {
+            throw new Exception("Manually thrown exception");
+        }
+    }
+
+    // ---------------- MAIN METHOD ----------------
+    public static void main(String[] args) {
+        System.out.println("========== INHERITANCE EXAMPLES ==========\n");
+
+        // Single Inheritance
+        Dog dog = new Dog();
+        System.out.println("1️⃣ Single Inheritance:");
+        dog.eat();
+        dog.bark();
+
+        // Multilevel Inheritance
+        Puppy puppy = new Puppy();
+        System.out.println("\n2️⃣ Multilevel Inheritance:");
+        puppy.eat();
+        puppy.bark();
+        puppy.weep();
+
+        // Hierarchical Inheritance
+        Cat cat = new Cat();
+        System.out.println("\n3️⃣ Hierarchical Inheritance:");
+        cat.eat();
+        cat.meow();
+
+        // Multiple Inheritance
+        Demo demo = new Demo();
+        System.out.println("\n4️⃣ Multiple Inheritance (via interfaces):");
+        demo.print();
+        demo.show();
+
+        // Hybrid Inheritance
+        C cObj = new C();
+        System.out.println("\n5️⃣ Hybrid Inheritance:");
+        cObj.displayA();
+        cObj.displayB();
+
+        // ---------------- EXCEPTION HANDLING ----------------
+        System.out.println("\n========== EXCEPTION HANDLING EXAMPLES ==========");
+
+        ExceptionExamples eDemo = new ExceptionExamples();
+        eDemo.tryCatchExample();
+        eDemo.multipleCatchExample();
+        eDemo.finallyExample();
+        eDemo.throwExample();
+        eDemo.throwsExample();
+    }
+}

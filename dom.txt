@@ -1,0 +1,17 @@
+<html>
+<body>
+<h2>Document Object Model (DOM)</h2>
+<p id='targetText'>This is the original text.</p>
+<div id='output'></div>
+<script type="text/javascript">
+// Get the element by its ID
+const element = document.getElementById("targetText");
+// Change the text content
+element.textContent = "The DOM has changed me!";
+// Update the output div to confirm the change
+document.getElementById("output").innerHTML = "The text of the paragraph above has
+been changed by JavaScript.";
+</script>
+<p>The JavaScript code located the paragraph above and changed its text.</p>
+</body>
+</html>
