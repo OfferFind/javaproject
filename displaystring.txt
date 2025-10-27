@@ -1,0 +1,80 @@
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    STRING DB 'HELLO WORLD', '$' ; Original string, $ terminated for INT 21H/09H
+    MSG_ORIGINAL DB 'Original String: ', '$'
+    MSG_REVERSED DB 0DH, 0AH, 'Reversed String: ', '$' ; 0DH, 0AH for new line (CR, LF)
+    
+.CODE
+MAIN PROC
+    ; Initialize Data Segment
+    MOV AX, @DATA
+    MOV DS, AX
+
+    ; --- 1. Display Original String Message ---
+    MOV AH, 09H       ; Function 09H: Display String
+    LEA DX, MSG_ORIGINAL
+    INT 21H
+    
+    ; --- 2. Display Original String ---
+    MOV AH, 09H       ; Function 09H: Display String
+    LEA DX, STRING    ; DX points to the $ terminated string
+    INT 21H
+
+    ; --- 3. Display Reversed String Message (with Newline) ---
+    MOV AH, 09H       ; Function 09H: Display String
+    LEA DX, MSG_REVERSED
+    INT 21H
+
+    ; --- 4. Reverse the String In-Place ---
+
+    ; Find the length of the string (excluding '$')
+    LEA SI, STRING      ; SI points to the start of the string
+    MOV CX, 0           ; CX will store the length
+    STRLEN_LOOP:
+        CMP BYTE PTR [SI], '$'
+        JE STRLEN_END
+        INC SI          ; Move to the next character
+        INC CX          ; Increment length counter
+        JMP STRLEN_LOOP
+    STRLEN_END:
+    
+    ; Setup pointers for swapping
+    LEA SI, STRING      ; SI points to the first character
+    DEC SI              ; SI will be incremented to point to the start in the loop
+    LEA DI, STRING      ; DI points to the start
+    ADD DI, CX          ; DI now points one byte past the last character
+    DEC DI              ; DI now points to the last character of the string
+    
+    MOV BH, CL          ; Copy string length (CX) to BH for temporary storage
+    SHR CX, 1           ; Loop count: Length / 2 (only swap half the string)
+    MOV CL, BH          ; Restore string length to CL (optional, just to show CX is available)
+
+    REVERSE_LOOP:
+        CMP CX, 0       ; Check if half of the string has been processed
+        JE REVERSE_END
+
+        ; Swap characters
+        MOV AL, [SI]    ; AL = Character from start
+        MOV BL, [DI]    ; BL = Character from end
+        MOV [DI], AL    ; Place start char at end position
+        MOV [SI], BL    ; Place end char at start position
+        
+        INC SI          ; Move start pointer forward
+        DEC DI          ; Move end pointer backward
+        LOOP REVERSE_LOOP ; Decrement CX and jump if not zero
+        
+    REVERSE_END:
+    
+    ; --- 5. Display Reversed String ---
+    ; The original string buffer now holds the reversed string
+    MOV AH, 09H       ; Function 09H: Display String
+    LEA DX, STRING    ; DX still points to the $ terminated string (now reversed)
+    INT 21H
+
+    ; --- 6. Exit Program ---
+    MOV AH, 4CH       ; Function 4CH: Terminate Program
+    INT 21H
+MAIN ENDP
+END MAIN
